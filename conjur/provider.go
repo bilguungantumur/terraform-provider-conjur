@@ -182,22 +182,16 @@ func dataSourceSecretUpdateRead(d *schema.ResourceData, meta interface{}) error 
 	name := d.Get("name").(string)
 	version := d.Get("version").(string)
 	update_value := d.Get("update_value").(string)
-
+	
 	log.Printf("[DEBUG] Setting secret for name=%q version=%q", name, version)
 	errAdd := client.AddSecret(name, update_value)
 
 	if errAdd != nil {
 		return errAdd
 	}
-
-	secretValue, err := client.RetrieveSecret(name)
-
-	if err != nil {
-		return err
-	}
 	
-	d.Set("value", string(secretValue))
-	d.SetId(hash(string(secretValue)))
+	d.Set("value", string(update_value))
+	d.SetId(hash(string(update_value)))
 
 	return nil
 }

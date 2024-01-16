@@ -11,9 +11,14 @@ provider "conjur" {
   # All variables for this tests are passed in through env vars
 }
 
+resource "random_password" "token" {
+  length  = 64
+  special = false
+}
+
 data "conjur_secret_update" "passwordupdate" {
-  name = "it/hc_service_account/bill/bill_policy1/sub1/password"
-  update_value = "test12345"
+  name = "it/hc_service_account/bill_test_2/bill_another_secret"
+  update_value = random_password.token.result
 }
 
 output "pass-to-output" {
